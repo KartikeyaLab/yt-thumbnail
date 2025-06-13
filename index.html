@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thumbnail Downloader Pro</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #0a0a0a;
+        color: #ffffff;
+        line-height: 1.6;
+        min-height: 100vh;
+        background-image: radial-gradient(
+            circle at 20% 80%,
+            rgba(80, 80, 80, 0.3) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(120, 120, 120, 0.3) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 40%,
+            rgba(60, 60, 60, 0.2) 0%,
+            transparent 50%
+          );
+        background-attachment: fixed;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #bbbbbb 0%, #dddddd 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .gradient-button {
+        background: #222222;
+        border: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .gradient-button:hover {
+        background: #333333;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .gradient-button:active {
+        transform: translateY(0);
+      }
+
+      .input-field {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 16px 20px;
+        color: white;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .input-field:focus {
+        outline: none;
+        border-color: rgba(150, 150, 150, 0.5);
+        box-shadow: 0 0 0 3px rgba(100, 100, 100, 0.1);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .input-field::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .floating {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeIn 0.8s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .loading-spinner {
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        border-top: 2px solid #aaaaaa;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .nav-link {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .feature-card {
+        padding: 30px 25px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      }
+
+      .feature-card .icon-bg {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 24px;
+        background: #333333;
+        color: white;
+      }
+      .feature-card:nth-child(1) .icon-bg {
+        background: #444444;
+      }
+      .feature-card:nth-child(2) .icon-bg {
+        background: #222222;
+      }
+      .feature-card:nth-child(3) .icon-bg {
+        background: #555555;
+      }
+
+      .step-number {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #222222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0 auto 20px;
+      }
+
+      .notification {
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        padding: 16px 24px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transform: translateX(400px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        max-width: 300px;
+        color: white;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+      }
+
+      .notification.success {
+        border-color: rgba(100, 100, 100, 0.5);
+        color: #cccccc;
+      }
+
+      .notification.error {
+        border-color: rgba(200, 200, 200, 0.5);
+        color: #aaaaaa;
+      }
+
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        padding: 20px;
+      }
+
+      .modal-content {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+      }
+
+      .close-button {
+        position: absolute;
+        top: -50px;
+        right: 0;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .close-button:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+
+      .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 40px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .section-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 24px;
+      }
+
+      .section-subtitle {
+        font-size: 1.125rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 60px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 20px;
+        }
+
+        .hero-title {
+          font-size: 3rem;
+        }
+
+        .hero-subtitle {
+          font-size: 1.1rem;
+        }
+
+        .section-title {
+          font-size: 2.5rem;
+        }
+
+        #navLinks {
+          display: none !important;
+        }
+        #mobileMenuBtn {
+          display: block !important;
+        }
+        #thumbnailContainer > div {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      #downloadBtn {
+        background: #444444;
+      }
+      #downloadBtn:hover {
+        background: #555555;
+      }
+
+      #previewBtn {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      #previewBtn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .about-stat-card .value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #aaaaaa;
+      }
+      .about-stat-card:nth-child(1) .value {
+        color: #bbbbbb;
+      }
+      .about-stat-card:nth-child(2) .value {
+        color: #cccccc;
+      }
+      .about-stat-card:nth-child(3) .value {
+        color: #dddddd;
+      }
+      .about-stat-card:nth-child(4) .value {
+        color: #eeeeee;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="notificationContainer" class="notification hidden"></div>
+
+    <nav
+      class="glass-effect"
+      style="
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+        padding: 16px 0;
+      "
+    >
+      <div
+        class="container"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div style="font-size: 1.5rem; font-weight: 700" class="gradient-text">
+          Thumbnail Downloader
+        </div>
+        <div style="display: flex; gap: 8px" id="navLinks">
+          <a href="#hero" class="nav-link">Home</a>
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#how" class="nav-link">How It Works</a>
+          <a href="#about" class="nav-link">About</a>
+        </div>
+        <button
+          id="mobileMenuBtn"
+          class="nav-link"
+          style="display: none; padding: 8px 12px"
+        >
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <div
+      id="mobileMenu"
+      class="hidden glass-effect"
+      style="
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        padding: 20px;
+      "
+    >
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <a href="#hero" class="nav-link">Home</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how" class="nav-link">How It Works</a>
+        <a href="#about" class="nav-link">About</a>
+      </div>
+    </div>
+
+    <section id="hero" style="padding: 140px 0 100px; text-align: center">
+      <div class="container">
+        <div class="fade-in">
+          <h1 class="hero-title">
+            Download <span class="gradient-text">YouTube</span><br />
+            Thumbnails <span class="gradient-text">Instantly</span>
+          </h1>
+          <p class="hero-subtitle">
+            Get the highest quality thumbnails from any YouTube video. Fast,
+            free, and beautifully simple.
+          </p>
+        </div>
+
+        <div
+          class="glass-card"
+          style="padding: 40px; margin: 60px auto; max-width: 800px"
+        >
+          <div style="display: flex; flex-direction: column; gap: 20px">
+            <div style="position: relative">
+              <input
+                id="videoInput"
+                type="text"
+                placeholder="Paste YouTube URL or Video ID here..."
+                class="input-field"
+                style="padding-right: 50px"
+              />
+              <div
+                id="inputStatus"
+                class="hidden"
+                style="
+                  position: absolute;
+                  right: 15px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  color: #cccccc;
+                "
+              >
+                ✓
+              </div>
+            </div>
+            <button
+              id="getThumbnailBtn"
+              class="gradient-button"
+              style="
+                padding: 16px 32px;
+                border-radius: 12px;
+                font-size: 16px;
+                cursor: pointer;
+              "
+            >
+              <span id="btnText">Get Thumbnail</span>
+              <div
+                id="btnLoader"
+                class="loading-spinner hidden"
+                style="margin: 0 auto"
+              ></div>
+            </button>
+          </div>
+        </div>
+
+        <div id="thumbnailContainer" class="hidden">
+          <div
+            class="glass-card fade-in"
+            style="padding: 40px; max-width: 1000px; margin: 0 auto"
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                align-items: center;
+              "
+            >
+              <div class="floating">
+                <img
+                  id="thumbnailImg"
+                  src=""
+                  alt="YouTube Thumbnail"
+                  style="
+                    width: 100%;
+                    border-radius: 16px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                  "
+                />
+              </div>
+              <div style="text-align: left">
+                <h3
+                  style="
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    margin-bottom: 12px;
+                  "
+                >
+                  Thumbnail Ready! 🎉
+                </h3>
+                <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 30px">
+                  Your high-quality thumbnail is ready for download.
+                </p>
+
+                <div style="margin-bottom: 24px">
+                  <label
+                    for="qualitySelect"
+                    style="
+                      display: block;
+                      margin-bottom: 8px;
+                      font-weight: 500;
+                      color: rgba(255, 255, 255, 0.8);
+                    "
+                  >
+                    Select Quality:
+                  </label>
+                  <select
+                    id="qualitySelect"
+                    class="input-field"
+                    style="padding: 12px 16px"
+                  >
+                    <option value="maxresdefault.jpg">
+                      Maximum Resolution (1280x720)
+                    </option>
+                    <option value="sddefault.jpg">
+                      Standard Definition (640x480)
+                    </option>
+                    <option value="hqdefault.jpg">
+                      High Quality (480x360)
+                    </option>
+                    <option value="mqdefault.jpg">
+                      Medium Quality (320x180)
+                    </option>
+                    <option value="default.jpg">Default (120x90)</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <button
+                    id="downloadBtn"
+                    style="
+                      padding: 14px 28px;
+                      background: #444444;
+                      border: none;
+                      color: white;
+                      border-radius: 12px;
+                      font-weight: 600;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+                    "
+                  >
+                    📥 Download Thumbnail
+                  </button>
+                  <button
+                    id="previewBtn"
+                    class="glass-effect"
+                    style="
+                      padding: 14px 28px;
+                      border: none;
+                      color: white;
+                      border-radius: 12px;
+                      font-weight: 600;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+                    "
+                  >
+                    👁️ Preview Full Size
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" style="padding: 100px 0">
+      <div class="container" style="text-align: center">
+        <h2 class="section-title gradient-text">Why Choose Our Tool?</h2>
+        <p class="section-subtitle">
+          Built for creators who demand the best quality and user experience.
+        </p>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+          "
+        >
+          <div class="glass-card feature-card">
+            <div class="icon-bg">⚡</div>
+            <h3
+              style="font-size: 1.25rem; font-weight: 600; margin-bottom: 12px"
+            >
+              Lightning Fast
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.6)">
+              Get your thumbnails in seconds with our optimized fetching system.
+            </p>
+          </div>
+
+          <div class="glass-card feature-card">
+            <div class="icon-bg">🔒</div>
+            <h3
+              style="font-size: 1.25rem; font-weight: 600; margin-bottom: 12px"
+            >
+              100% Private
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.6)">
+              Everything runs in your browser. No data stored or shared
+              anywhere.
+            </p>
+          </div>
+
+          <div class="glass-card feature-card">
+            <div class="icon-bg">🎯</div>
+            <h3
+              style="font-size: 1.25rem; font-weight: 600; margin-bottom: 12px"
+            >
+              Premium Quality
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.6)">
+              Multiple quality options up to maximum resolution available.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="glass-effect" style="padding: 100px 0">
+      <div class="container" style="text-align: center">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">Three simple steps to get your thumbnail</p>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+          "
+        >
+          <div>
+            <div class="step-number">1</div>
+            <h3
+              style="font-size: 1.25rem; font-weight: 600; margin-bottom: 12px"
+            >
+              Paste URL
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.6)">
+              Copy and paste any YouTube video URL or just the video ID into the
+              input field.
+            </p>
+          </div>
+
+          <div>
+            <div class="step-number">2</div>
+            <h3
+              style="font-size: 1.25rem; font-weight: 600; margin-bottom: 12px"
+            >
+              Choose Quality
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.6)">
+              Select your preferred quality from multiple options, up to maximum
+              resolution.
+            </p>
+          </div>
+
+          <div>
+            <div class="step-number">3</div>
+            <h3
+              style="font-size: 1.25rem; font-weight: 600; margin-bottom: 12px"
+            >
+              Download
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.6)">
+              Click download and save the high-quality thumbnail to your device
+              instantly.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" style="padding: 100px 0">
+      <div class="container" style="text-align: center">
+        <h2 class="section-title gradient-text">About This Tool</h2>
+        <p
+          style="
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 800px;
+            margin: 0 auto 60px;
+            line-height: 1.8;
+          "
+        >
+          Created for content creators, designers, and anyone who needs quick
+          access to YouTube thumbnails. This tool combines elegant design with
+          powerful functionality, ensuring you get the best possible thumbnail
+          quality with zero hassle.
+        </p>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+          "
+        >
+          <div
+            class="glass-card about-stat-card"
+            style="padding: 30px 20px; text-align: center"
+          >
+            <div class="value">100%</div>
+            <div style="color: rgba(255, 255, 255, 0.7)">Free Forever</div>
+          </div>
+          <div
+            class="glass-card about-stat-card"
+            style="padding: 30px 20px; text-align: center"
+          >
+            <div class="value">5</div>
+            <div style="color: rgba(255, 255, 255, 0.7)">Quality Options</div>
+          </div>
+          <div
+            class="glass-card about-stat-card"
+            style="padding: 30px 20px; text-align: center"
+          >
+            <div class="value">0</div>
+            <div style="color: rgba(255, 255, 255, 0.7)">Ads or Tracking</div>
+          </div>
+          <div
+            class="glass-card about-stat-card"
+            style="padding: 30px 20px; text-align: center"
+          >
+            <div class="value">∞</div>
+            <div style="color: rgba(255, 255, 255, 0.7)">Downloads</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="glass-effect" style="padding: 60px 0 30px">
+      <div class="container">
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+          "
+        >
+          <div>
+            <h3
+              style="font-size: 1.5rem; font-weight: 700"
+              class="gradient-text"
+            >
+              Thumbnail Downloader Pro
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.6); line-height: 1.6">
+              The fastest and most elegant way to download YouTube thumbnails in
+              maximum quality.
+            </p>
+          </div>
+
+          <div>
+            <h4
+              style="font-size: 1.125rem; font-weight: 600; margin-bottom: 16px"
+            >
+              Quick Links
+            </h4>
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <a href="#hero" class="nav-link" style="padding: 4px 0">Home</a>
+              <a href="#features" class="nav-link" style="padding: 4px 0"
+                >Features</a
+              >
+              <a href="#how" class="nav-link" style="padding: 4px 0"
+                >How It Works</a
+              >
+              <a href="#about" class="nav-link" style="padding: 4px 0">About</a>
+            </div>
+          </div>
+
+          <div>
+            <h4
+              style="font-size: 1.125rem; font-weight: 600; margin-bottom: 16px"
+            >
+              Contact
+            </h4>
+            <div style="color: rgba(255, 255, 255, 0.6)">
+              <p style="margin-bottom: 8px">
+                <a
+                  href="mailto:kartikeya30062009@gmail.com"
+                  style="color: #bbbbbb; text-decoration: none"
+                >
+                  kartikeya30062009@gmail.com
+                </a>
+              </p>
+              <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.4)">
+                Built with ❤️ for creators
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 30px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+          "
+        >
+          <p>
+            &copy; 2025 Kartikeya. All rights reserved. Made with passion for
+            the creator community.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <div id="previewModal" class="modal hidden">
+      <div class="modal-content">
+        <button class="close-button" id="closePreviewBtn">✕</button>
+        <img
+          id="previewImg"
+          src=""
+          alt="Full Size Preview"
+          style="
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+          "
+        />
+      </div>
+    </div>
+
+    <script>
+      let currentVideoId = "";
+      let currentQuality = "maxresdefault.jpg";
+
+      const videoInput = document.getElementById("videoInput");
+      const getThumbnailBtn = document.getElementById("getThumbnailBtn");
+      const btnText = document.getElementById("btnText");
+      const btnLoader = document.getElementById("btnLoader");
+      const inputStatus = document.getElementById("inputStatus");
+      const thumbnailContainer = document.getElementById("thumbnailContainer");
+      const thumbnailImg = document.getElementById("thumbnailImg");
+      const qualitySelect = document.getElementById("qualitySelect");
+      const downloadBtn = document.getElementById("downloadBtn");
+      const previewBtn = document.getElementById("previewBtn");
+      const previewModal = document.getElementById("previewModal");
+      const previewImg = document.getElementById("previewImg");
+      const closePreviewBtn = document.getElementById("closePreviewBtn");
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const navLinks = document.getElementById("navLinks");
+      const notificationContainer = document.getElementById(
+        "notificationContainer"
+      );
+
+      function toggleMobileMenu() {
+        mobileMenu.classList.toggle("hidden");
+      }
+
+      function checkMobileView() {
+        if (window.innerWidth <= 768) {
+          navLinks.style.display = "none";
+          mobileMenuBtn.style.display = "block";
+        } else {
+          navLinks.style.display = "flex";
+          mobileMenuBtn.style.display = "none";
+          mobileMenu.classList.add("hidden");
+        }
+      }
+
+      function validateInput() {
+        const input = videoInput.value.trim();
+        const videoId = extractVideoId(input);
+
+        if (videoId && input.length > 0) {
+          inputStatus.classList.remove("hidden");
+        } else {
+          inputStatus.classList.add("hidden");
+        }
+      }
+
+      function extractVideoId(input) {
+        if (!input) return null;
+
+        const youtubeRegex =
+          /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        const match = input.match(youtubeRegex);
+
+        if (match && match[1]) {
+          return match[1];
+        }
+
+        if (/^[a-zA-Z0-9_-]{11}$/.test(input)) {
+          return input;
+        }
+
+        return null;
+      }
+
+      function getThumbnail() {
+        const input = videoInput.value.trim();
+        const videoId = extractVideoId(input);
+
+        if (!videoId) {
+          showNotification(
+            "Invalid YouTube URL or ID. Please try again.",
+            "error"
+          );
+          thumbnailContainer.classList.add("hidden");
+          return;
+        }
+
+        btnText.classList.add("hidden");
+        btnLoader.classList.remove("hidden");
+        getThumbnailBtn.disabled = true;
+        thumbnailContainer.classList.add("hidden");
+
+        currentVideoId = videoId;
+        currentQuality = qualitySelect.value;
+
+        const baseUrl = `https://i.ytimg.com/vi/${videoId}`;
+        const qualityOrder = [
+          currentQuality,
+          "maxresdefault.jpg",
+          "sddefault.jpg",
+          "hqdefault.jpg",
+          "mqdefault.jpg",
+          "default.jpg",
+        ];
+
+        tryNextThumbnail(baseUrl, [...new Set(qualityOrder)]);
+      }
+
+      function tryNextThumbnail(base, qualities) {
+        if (qualities.length === 0) {
+          showNotification(
+            "Could not load any thumbnail for this video.",
+            "error"
+          );
+          resetButton();
+          return;
+        }
+
+        const url = `${base}/${qualities[0]}`;
+        const img = new Image();
+
+        img.onload = function () {
+          thumbnailImg.src = url;
+          previewImg.src = url;
+
+          thumbnailContainer.classList.remove("hidden");
+          thumbnailContainer.classList.add("fade-in");
+          thumbnailContainer.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+
+          showNotification("Thumbnail loaded successfully!", "success");
+          resetButton();
+        };
+
+        img.onerror = function () {
+          tryNextThumbnail(base, qualities.slice(1));
+        };
+
+        img.src = url;
+      }
+
+      function resetButton() {
+        btnText.classList.remove("hidden");
+        btnLoader.classList.add("hidden");
+        getThumbnailBtn.disabled = false;
+      }
+
+      function showNotification(message, type) {
+        notificationContainer.textContent = message;
+        notificationContainer.className = `notification show ${type}`;
+        setTimeout(() => {
+          notificationContainer.classList.remove("show");
+          notificationContainer.classList.add("hidden");
+        }, 3000);
+      }
+
+      function downloadThumbnail() {
+        if (!currentVideoId) {
+          showNotification(
+            "No thumbnail to download. Please get a thumbnail first.",
+            "error"
+          );
+          return;
+        }
+
+        const imageUrl = thumbnailImg.src;
+        const link = document.createElement("a");
+        link.href = imageUrl;
+        const filename = `${currentVideoId}_${qualitySelect.value}`;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showNotification("Download initiated!", "success");
+      }
+
+      function openPreviewModal() {
+        if (!thumbnailImg.src) {
+          showNotification(
+            "No thumbnail to preview. Please get a thumbnail first.",
+            "error"
+          );
+          return;
+        }
+        previewImg.src = thumbnailImg.src;
+        previewModal.classList.remove("hidden");
+      }
+
+      function closePreviewModal() {
+        previewModal.classList.add("hidden");
+      }
+
+      window.addEventListener("load", checkMobileView);
+      window.addEventListener("resize", checkMobileView);
+
+      mobileMenuBtn.addEventListener("click", toggleMobileMenu);
+
+      mobileMenu.querySelectorAll(".nav-link").forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("hidden");
+        });
+      });
+
+      videoInput.addEventListener("input", validateInput);
+
+      getThumbnailBtn.addEventListener("click", getThumbnail);
+
+      qualitySelect.addEventListener("change", (event) => {
+        currentQuality = event.target.value;
+        if (currentVideoId) {
+          const newUrl = `https://i.ytimg.com/vi/${currentVideoId}/${currentQuality}`;
+          thumbnailImg.src = newUrl;
+          previewImg.src = newUrl;
+          showNotification(
+            `Quality changed to ${
+              event.target.options[event.target.selectedIndex].text
+            }`,
+            "success"
+          );
+        }
+      });
+
+      downloadBtn.addEventListener("click", downloadThumbnail);
+
+      previewBtn.addEventListener("click", openPreviewModal);
+
+      closePreviewBtn.addEventListener("click", closePreviewModal);
+
+      previewModal.addEventListener("click", (event) => {
+        if (event.target === previewModal) {
+          closePreviewModal();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          !previewModal.classList.contains("hidden")
+        ) {
+          closePreviewModal();
+        }
+      });
+
+      videoInput.addEventListener("paste", (event) => {
+        setTimeout(() => {
+          if (extractVideoId(videoInput.value.trim())) {
+            getThumbnail();
+          }
+        }, 0);
+      });
+    </script>
+  </body>
+</html>
