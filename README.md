@@ -92,7 +92,7 @@ Contributions welcome! Please:
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT License. Use freely, modify with love, and share with credit.
 
 ## 👨‍💻 Author
 
