@@ -54,16 +54,6 @@ The app tries multiple resolutions in order:
 - **Typography**: Inter font
 - **Deployment**: GitHub Pages
 
-## 🔧 Customization
-
-The app uses CSS custom properties for easy theming:
-
-```css
-/* Dark theme with glassmorphism effects */
-background: radial-gradient(circle at top left, #111 0%, #000 100%);
-backdrop-filter: blur(12px);
-```
-
 ## 🤝 Contributing
 
 Contributions welcome! Please:
